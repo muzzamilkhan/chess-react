@@ -1,6 +1,8 @@
+import Board from "./board/board";
+
 export function App() {
     return (
-        <div />
+        <Board/>
     );
         
 }
