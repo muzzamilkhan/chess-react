@@ -1,46 +1,43 @@
 import React from 'react';
-import './board.module.scss';
+import './board.scss';
+
+const numToAlpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
 
 export function Board() {
-    // const table = React.createElement('table', { style: styles}, 
-    //     React.createElement('tbody', {} ,
-    //         React.createElement('tr', {},
-    //             React.createElement('td')    
-    //         )
-    //     )
-    // )
+    let isDark = false;
 
-    function ObjectCell(idx: number) {
-        const className = `col${idx}`;
+    function ObjectCell(row: number, col: number) {
+        isDark = !isDark;
+        const cellName = `${numToAlpha[row]}${col+1}`
+        const className = `cell${cellName} ${isDark ? 'dark' : 'light'}`;
+
         return (
-            <td className={className} style={{ border: '1px solid', width: '50px', height: '50px'}}>&nbsp;</td>
+            <td className={className}>{cellName}</td>
         );
     }
 
+    function ObjectRows(idx: number) {
+        const cells = [];
 
-    const cells = [];
+        for (let i=0; i < 8; i++) {
+            cells.push(ObjectCell(i, idx));
+        }
 
-    for (let i=0; i < 8; i++) {
-        cells.push(ObjectCell(i+1));
-    }
-
-    function ObjectRows(idx: number, cells: any) {
-        const className = `row${idx}`;
-        return (
-            <tr className={className}>
-                { cells }
-            </tr>
-        )
+        return (<tr>{ cells }</tr>);
     }
 
     const rows = [];
-    for (let i=0; i < 8; i++) {
-        rows.push(ObjectRows(i+1, cells));
+    
+
+    for (let i=7; i >= 0; i--) {
+        isDark = i % 2 === 1;
+        rows.push(ObjectRows(i));
     }
 
 
     return (
-        <table className='table' style={{ border: '1px solid', borderCollapse: 'collapse'}}>
+        <table>
             <tbody>
                 { rows }
             </tbody>
