@@ -2,32 +2,15 @@ import './board.scss';
 import Cell from '../cell/cell';
 import { useAtom } from 'jotai';
 import {
-    boardPositionAtom,
     movePieceAtom,
-    pieceAtom,
     positionAtom,
+    selectedPieceAtom,
 } from '../../state/store';
-import { Piece, PieceType } from '../../models/types';
 
 export function Board() {
-    const [boardPosition] = useAtom(boardPositionAtom);
-    const [, positionSet] = useAtom(positionAtom);
-    const [, pieceSet] = useAtom(pieceAtom);
-    const [, movePieceSet] = useAtom(movePieceAtom);
-
-    const movePiece = () => {
-        const rook = boardPosition.filter(
-            (_piece) => _piece.type === PieceType.ROOK
-        )[0] as Piece;
-        pieceSet(rook);
-        positionSet({ x: rook.position.x + 1, y: rook.position.y + 1 });
-        movePieceSet();
-    };
-
     return (
         <table>
             <tbody>
-                <button onClick={movePiece}>Move</button>
                 <tr>
                     <td className="white">
                         <Cell name="A8" />

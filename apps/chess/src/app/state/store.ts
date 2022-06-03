@@ -26,22 +26,19 @@ const movePiece = (
     });
 };
 
-export const pieceAtom = atom<Piece | undefined>(undefined);
+export const selectedPieceAtom = atom<Piece | undefined>(undefined);
 export const positionAtom = atom<Position | undefined>(undefined);
 export const boardPositionAtom = atom<BoardPosition[]>(initialBoardPosition);
 export const movePieceAtom = atom(
     () => '',
     (get, set) => {
-        console.log('BP', get(boardPositionAtom));
-        console.log('P', get(pieceAtom));
-        console.log('pos', get(positionAtom));
-        console.log(
-            'moved',
-            movePiece(get(boardPositionAtom), get(pieceAtom), get(positionAtom))
-        );
         set(
             boardPositionAtom,
-            movePiece(get(boardPositionAtom), get(pieceAtom), get(positionAtom))
+            movePiece(
+                get(boardPositionAtom),
+                get(selectedPieceAtom),
+                get(positionAtom)
+            )
         );
     }
 );

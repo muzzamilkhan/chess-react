@@ -2,6 +2,10 @@
     height: 70px;
 }
 
+.selected {
+    border: 1px solid blue;
+}
+
 .pawn-black {
     background-image: url('../../../assets/bp.svg');
 }
