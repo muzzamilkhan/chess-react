@@ -1,10 +1,33 @@
 import './board.scss';
 import Cell from '../cell/cell';
+import { useAtom } from 'jotai';
+import {
+    boardPositionAtom,
+    movePieceAtom,
+    pieceAtom,
+    positionAtom,
+} from '../../state/store';
+import { Piece, PieceType } from '../../models/types';
 
 export function Board() {
+    const [boardPosition] = useAtom(boardPositionAtom);
+    const [, positionSet] = useAtom(positionAtom);
+    const [, pieceSet] = useAtom(pieceAtom);
+    const [, movePieceSet] = useAtom(movePieceAtom);
+
+    const movePiece = () => {
+        const rook = boardPosition.filter(
+            (_piece) => _piece.type === PieceType.ROOK
+        )[0] as Piece;
+        pieceSet(rook);
+        positionSet({ x: rook.position.x + 1, y: rook.position.y + 1 });
+        movePieceSet();
+    };
+
     return (
         <table>
             <tbody>
+                <button onClick={movePiece}>Move</button>
                 <tr>
                     <td className="white">
                         <Cell name="A8" />
@@ -33,184 +56,184 @@ export function Board() {
                 </tr>
                 <tr>
                     <td className="dark">
-                        <Cell name="A8" />
+                        <Cell name="A7" />
                     </td>
                     <td className="white">
-                        <Cell name="B8" />
+                        <Cell name="B7" />
                     </td>
                     <td className="dark">
-                        <Cell name="C8" />
+                        <Cell name="C7" />
                     </td>
                     <td className="white">
-                        <Cell name="D8" />
+                        <Cell name="D7" />
                     </td>
                     <td className="dark">
-                        <Cell name="E8" />
+                        <Cell name="E7" />
                     </td>
                     <td className="white">
-                        <Cell name="F8" />
+                        <Cell name="F7" />
                     </td>
                     <td className="dark">
-                        <Cell name="H8" />
+                        <Cell name="G7" />
                     </td>
                     <td className="white">
-                        <Cell name="H8" />
+                        <Cell name="H7" />
                     </td>
                 </tr>
                 <tr>
                     <td className="white">
-                        <Cell name="A8" />
+                        <Cell name="A6" />
                     </td>
                     <td className="dark">
-                        <Cell name="B8" />
+                        <Cell name="B6" />
                     </td>
                     <td className="white">
-                        <Cell name="C8" />
+                        <Cell name="C6" />
                     </td>
                     <td className="dark">
-                        <Cell name="D8" />
+                        <Cell name="D6" />
                     </td>
                     <td className="white">
-                        <Cell name="E8" />
+                        <Cell name="E6" />
                     </td>
                     <td className="dark">
-                        <Cell name="F8" />
+                        <Cell name="F6" />
                     </td>
                     <td className="white">
-                        <Cell name="G8" />
+                        <Cell name="G6" />
                     </td>
                     <td className="dark">
-                        <Cell name="H8" />
+                        <Cell name="H6" />
                     </td>
                 </tr>
                 <tr>
                     <td className="dark">
-                        <Cell name="A8" />
+                        <Cell name="A5" />
                     </td>
                     <td className="white">
-                        <Cell name="B8" />
+                        <Cell name="B5" />
                     </td>
                     <td className="dark">
-                        <Cell name="C8" />
+                        <Cell name="C5" />
                     </td>
                     <td className="white">
-                        <Cell name="D8" />
+                        <Cell name="D5" />
                     </td>
                     <td className="dark">
-                        <Cell name="E8" />
+                        <Cell name="E5" />
                     </td>
                     <td className="white">
-                        <Cell name="F8" />
+                        <Cell name="F5" />
                     </td>
                     <td className="dark">
-                        <Cell name="H8" />
+                        <Cell name="G5" />
                     </td>
                     <td className="white">
-                        <Cell name="H8" />
+                        <Cell name="H5" />
                     </td>
                 </tr>
                 <tr>
                     <td className="white">
-                        <Cell name="A8" />
+                        <Cell name="A4" />
                     </td>
                     <td className="dark">
-                        <Cell name="B8" />
+                        <Cell name="B4" />
                     </td>
                     <td className="white">
-                        <Cell name="C8" />
+                        <Cell name="C4" />
                     </td>
                     <td className="dark">
-                        <Cell name="D8" />
+                        <Cell name="D4" />
                     </td>
                     <td className="white">
-                        <Cell name="E8" />
+                        <Cell name="E4" />
                     </td>
                     <td className="dark">
-                        <Cell name="F8" />
+                        <Cell name="F4" />
                     </td>
                     <td className="white">
-                        <Cell name="G8" />
+                        <Cell name="G4" />
                     </td>
                     <td className="dark">
-                        <Cell name="H8" />
+                        <Cell name="H4" />
                     </td>
                 </tr>
                 <tr>
                     <td className="dark">
-                        <Cell name="A8" />
+                        <Cell name="A3" />
                     </td>
                     <td className="white">
-                        <Cell name="B8" />
+                        <Cell name="B3" />
                     </td>
                     <td className="dark">
-                        <Cell name="C8" />
+                        <Cell name="C3" />
                     </td>
                     <td className="white">
-                        <Cell name="D8" />
+                        <Cell name="D3" />
                     </td>
                     <td className="dark">
-                        <Cell name="E8" />
+                        <Cell name="E3" />
                     </td>
                     <td className="white">
-                        <Cell name="F8" />
+                        <Cell name="F3" />
                     </td>
                     <td className="dark">
-                        <Cell name="H8" />
+                        <Cell name="G3" />
                     </td>
                     <td className="white">
-                        <Cell name="H8" />
+                        <Cell name="H3" />
                     </td>
                 </tr>
                 <tr>
                     <td className="white">
-                        <Cell name="A8" />
+                        <Cell name="A2" />
                     </td>
                     <td className="dark">
-                        <Cell name="B8" />
+                        <Cell name="B2" />
                     </td>
                     <td className="white">
-                        <Cell name="C8" />
+                        <Cell name="C2" />
                     </td>
                     <td className="dark">
-                        <Cell name="D8" />
+                        <Cell name="D2" />
                     </td>
                     <td className="white">
-                        <Cell name="E8" />
+                        <Cell name="E2" />
                     </td>
                     <td className="dark">
-                        <Cell name="F8" />
+                        <Cell name="F2" />
                     </td>
                     <td className="white">
-                        <Cell name="G8" />
+                        <Cell name="G2" />
                     </td>
                     <td className="dark">
-                        <Cell name="H8" />
+                        <Cell name="H2" />
                     </td>
                 </tr>
                 <tr>
                     <td className="dark">
-                        <Cell name="A8" />
+                        <Cell name="A1" />
                     </td>
                     <td className="white">
-                        <Cell name="B8" />
+                        <Cell name="B1" />
                     </td>
                     <td className="dark">
-                        <Cell name="C8" />
+                        <Cell name="C1" />
                     </td>
                     <td className="white">
-                        <Cell name="D8" />
+                        <Cell name="D1" />
                     </td>
                     <td className="dark">
-                        <Cell name="E8" />
+                        <Cell name="E1" />
                     </td>
                     <td className="white">
-                        <Cell name="F8" />
+                        <Cell name="F1" />
                     </td>
                     <td className="dark">
-                        <Cell name="H8" />
+                        <Cell name="G1" />
                     </td>
                     <td className="white">
-                        <Cell name="H8" />
+                        <Cell name="H1" />
                     </td>
                 </tr>
             </tbody>
