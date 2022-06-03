@@ -13,7 +13,14 @@ export function Piece(prop: { name: string }) {
             _piece.position.x === position.x && _piece.position.y === position.y
     );
 
-    return <div>{piece ? piece.type : ''}</div>;
+    return (
+        <div
+            className={
+                piece
+                    ? `piece ${piece.type.toLowerCase()}-${piece.color}`
+                    : 'piece'
+            }></div>
+    );
 }
 
 export default Piece;
