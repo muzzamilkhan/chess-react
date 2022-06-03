@@ -1,16 +1,12 @@
 import { useAtom } from 'jotai';
-import { useEffect, useRef } from 'react';
-import { Piece as BoardPiece, numToAlpha, Position } from '../../models/types';
 import { boardPositionAtom } from '../../state/store';
 import './piece.scss';
+import { cellToPostion } from '../../models/helpers';
 
 export function Piece(prop: { name: string }) {
     const [boardPosition] = useAtom(boardPositionAtom);
 
-    const position: Position = {
-        x: numToAlpha.indexOf(prop.name.substring(0, 1)),
-        y: parseInt(prop.name.substring(1, 2)) - 1,
-    };
+    const position = cellToPostion(prop.name);
 
     const piece = boardPosition.find(
         (_piece) =>

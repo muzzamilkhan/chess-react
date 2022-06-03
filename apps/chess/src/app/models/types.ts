@@ -318,5 +318,3 @@ export type Action = {
     type: ActionTypes;
     payload: any;
 };
-
-export const numToAlpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
