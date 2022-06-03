@@ -1,7 +1,42 @@
-.container {
-    width: 100%;
-    height: 100%;
-    font-size: 15px;
-    text-align: right;
-    vertical-align: top;
+.piece {
+    height: 70px;
+}
+.selected {
+    border: 1px solid blue;
+}
+.pawn-black {
+    background-image: url('../../../assets/bp.svg');
+}
+.rook-black {
+    background-image: url('../../../assets/br.svg');
+}
+.knight-black {
+    background-image: url('../../../assets/bn.svg');
+}
+.bishop-black {
+    background-image: url('../../../assets/bb.svg');
+}
+.queen-black {
+    background-image: url('../../../assets/bq.svg');
+}
+.king-black {
+    background-image: url('../../../assets/bk.svg');
+}
+.pawn-white {
+    background-image: url('../../../assets/wp.svg');
+}
+.rook-white {
+    background-image: url('../../../assets/wr.svg');
+}
+.knight-white {
+    background-image: url('../../../assets/wn.svg');
+}
+.bishop-white {
+    background-image: url('../../../assets/wb.svg');
+}
+.queen-white {
+    background-image: url('../../../assets/wq.svg');
+}
+.king-white {
+    background-image: url('../../../assets/wk.svg');
 }

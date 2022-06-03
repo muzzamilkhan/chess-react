@@ -1,16 +1,11 @@
 import { atom } from 'jotai';
-import {
-    Position,
-    BoardPosition,
-    initialBoardPosition,
-    Piece,
-} from '../models/types';
+import { Position, initialBoardPosition, Piece } from '../models/types';
 
 const movePiece = (
-    boardPositions: BoardPosition[],
+    boardPositions: Piece[],
     piece?: Piece,
     position?: Position
-): BoardPosition[] => {
+): Piece[] => {
     if (!piece || !position) {
         return boardPositions;
     }
@@ -28,7 +23,7 @@ const movePiece = (
 
 export const selectedPieceAtom = atom<Piece | undefined>(undefined);
 export const positionAtom = atom<Position | undefined>(undefined);
-export const boardPositionAtom = atom<BoardPosition[]>(initialBoardPosition);
+export const boardPositionAtom = atom<Piece[]>(initialBoardPosition);
 export const movePieceAtom = atom(
     () => '',
     (get, set) => {

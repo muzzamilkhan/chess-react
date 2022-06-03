@@ -50,9 +50,7 @@
         {
             "files": ["*.ts", "*.tsx"],
             "extends": ["plugin:@nrwl/nx/typescript"],
-            "rules": {
-                "indent": ["error", 4]
-            }
+            "rules": {}
         },
         {
             "files": ["*.js", "*.jsx"],

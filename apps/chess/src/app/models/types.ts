@@ -25,97 +25,11 @@ export interface Piece {
     id: string;
     type: PieceType;
     color: blackOrWhite;
-    allowedMoves: Move[];
     position: Position;
+    canJump?: boolean;
 }
 
-export abstract class BasePiece {
-    private _piece: Piece;
-
-    constructor(
-        type: PieceType,
-        color: blackOrWhite,
-        allowedMoves: Move[],
-        position: Position
-    ) {
-        this._piece = { id: uuid(), type, color, allowedMoves, position };
-
-        return this;
-    }
-
-    get allowedMoves() {
-        return this._piece.allowedMoves;
-    }
-
-    get color() {
-        return this._piece.color;
-    }
-
-    get type() {
-        return this._piece.type;
-    }
-
-    get position() {
-        return this._piece.position;
-    }
-
-    get id() {
-        return this._piece.id;
-    }
-
-    move(move: Move) {
-        this.validateMove(move);
-
-        const newPosition = { ...this._piece.position };
-
-        newPosition.x += move.up;
-        newPosition.y += move.right;
-
-        this.validatePosition(newPosition);
-
-        this._piece.position = newPosition;
-
-        return this;
-    }
-
-    private validateMove(move: Move): void {
-        if (
-            this._piece.allowedMoves.find(
-                (m) => m.right === move.right && m.up === move.up
-            )
-        )
-            return;
-
-        throw new Error(
-            `Invalid move ${JSON.stringify(
-                move
-            )}. Allowed moves include: ${JSON.stringify(
-                this._piece.allowedMoves
-            )}`
-        );
-    }
-
-    private validatePosition(position: Position): void {
-        if (
-            position.x >= 0 &&
-            position.x <= 8 &&
-            position.y >= 0 &&
-            position.y <= 8
-        )
-            return;
-
-        throw new Error('Position out of bounds');
-    }
-}
-
-export interface BoardPosition {
-    id: string;
-    position: Position;
-    color: blackOrWhite;
-    type: PieceType;
-}
-
-export const initialBoardPosition: BoardPosition[] = [
+export const initialBoardPosition: Piece[] = [
     {
         id: uuid(),
         position: { x: 0, y: 0 },
@@ -127,6 +41,7 @@ export const initialBoardPosition: BoardPosition[] = [
         position: { x: 1, y: 0 },
         color: 'white',
         type: PieceType.KNIGHT,
+        canJump: true,
     },
     {
         id: uuid(),
@@ -212,7 +127,6 @@ export const initialBoardPosition: BoardPosition[] = [
         color: 'white',
         type: PieceType.PAWN,
     },
-
     {
         id: uuid(),
         position: { x: 0, y: 6 },
@@ -310,11 +224,3 @@ export const initialBoardPosition: BoardPosition[] = [
         type: PieceType.ROOK,
     },
 ];
-
-export enum ActionTypes {
-    MOVE_PIECE = 'MOVE_PIECE',
-}
-export type Action = {
-    type: ActionTypes;
-    payload: any;
-};

@@ -1,11 +1,5 @@
 import './board.scss';
 import Cell from '../cell/cell';
-import { useAtom } from 'jotai';
-import {
-    movePieceAtom,
-    positionAtom,
-    selectedPieceAtom,
-} from '../../state/store';
 
 export function Board() {
     return (
