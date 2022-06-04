@@ -36,7 +36,7 @@ export function Cell(prop: { name: string }) {
         return possibleMoves.find(
             (_move) => _move.x === position.x && _move.y === position.y
         )
-            ? 'possibleMove'
+            ? 'possible-move'
             : '';
     };
 
