@@ -22,7 +22,6 @@
                 "extensions": [".tsx"]
             }
         ],
-        "complexity": ["error", 10],
         "no-await-in-loop": "warn",
         "no-eval": "error",
         "no-implied-eval": "error",

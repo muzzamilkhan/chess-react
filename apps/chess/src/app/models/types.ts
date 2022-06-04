@@ -26,7 +26,6 @@ export interface Piece {
     type: PieceType;
     color: blackOrWhite;
     position: Position;
-    canJump?: boolean;
 }
 
 export const initialBoardPosition: Piece[] = [
@@ -41,7 +40,6 @@ export const initialBoardPosition: Piece[] = [
         position: { x: 1, y: 0 },
         color: 'white',
         type: PieceType.KNIGHT,
-        canJump: true,
     },
     {
         id: uuid(),

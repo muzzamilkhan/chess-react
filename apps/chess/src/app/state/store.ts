@@ -23,6 +23,7 @@ const movePiece = (
 
 export const selectedPieceAtom = atom<Piece | undefined>(undefined);
 export const positionAtom = atom<Position | undefined>(undefined);
+export const possibleMovesAtom = atom<Position[]>([]);
 export const boardPositionAtom = atom<Piece[]>(initialBoardPosition);
 export const movePieceAtom = atom(
     () => '',
