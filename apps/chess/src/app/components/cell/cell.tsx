@@ -67,11 +67,10 @@ export function Cell(prop: { name: string }) {
             onClick={() => move()}
             className={
                 (piece
-                    ? `piece ${piece.type.toLowerCase()}-${
+                    ? `piece occupied ${piece.type.toLowerCase()}-${
                           piece.color
                       } ${selected()}`
-                    : 'piece') +
-                ` ${possibleMove()} ${JSON.stringify(position)}`
+                    : 'piece') + ` ${possibleMove()}`
             }></div>
     );
 }

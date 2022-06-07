@@ -1,14 +1,20 @@
+import { type } from 'os';
 import { Piece, PieceType, Position } from './types';
 
 const jumpables: PieceType[] = [PieceType.KNIGHT];
 
-enum Direction {
+enum YDirection {
     UP = 'UP',
     DOWN = 'DOWN',
 }
 
-const getDirection = (color: Piece['color']): Direction =>
-    color === 'white' ? Direction.UP : Direction.DOWN;
+enum XDirection {
+    RIGHT = 'RIGHT',
+    LEFT = 'LEFT',
+}
+
+const getDirection = (color: Piece['color']): YDirection =>
+    color === 'white' ? YDirection.UP : YDirection.DOWN;
 
 const enum Checks {
     HAS_ENEMY = 'HAS_ENEMY',
@@ -16,41 +22,73 @@ const enum Checks {
     ENEMY_OR_EMPTY = 'ENEMY_OR_EMPTY',
 }
 
+const allDiagonals = [
+    {
+        yDirection: YDirection.UP,
+        xDirection: XDirection.RIGHT,
+    },
+    {
+        yDirection: YDirection.UP,
+        xDirection: XDirection.LEFT,
+    },
+    {
+        yDirection: YDirection.DOWN,
+        xDirection: XDirection.RIGHT,
+    },
+    {
+        yDirection: YDirection.DOWN,
+        xDirection: XDirection.LEFT,
+    },
+] as {
+    yDirection: YDirection;
+    xDirection: XDirection;
+}[];
+
+const allStraights = [
+    YDirection.UP,
+    YDirection.DOWN,
+    XDirection.RIGHT,
+    XDirection.LEFT,
+] as Array<YDirection | XDirection>;
+
 export const getPossibleMoves = (piece: Piece, boardPosition: Piece[]) => {
     const direction = getDirection(piece.color);
     const possibleMoves: Position[] = [];
 
     switch (piece.type) {
         case PieceType.PAWN:
+            // Default move
             moveStraight(
                 piece,
                 boardPosition,
                 possibleMoves,
-                direction === Direction.UP ? 'up' : 'down',
+                direction,
                 Checks.IS_EMPTY,
                 1
             );
 
+            // Initial double move
             if (
-                (direction === Direction.UP && piece.position.y === 1) ||
-                (direction === Direction.DOWN && piece.position.y === 6)
+                (direction === YDirection.UP && piece.position.y === 1) ||
+                (direction === YDirection.DOWN && piece.position.y === 6)
             ) {
                 moveStraight(
                     piece,
                     boardPosition,
                     possibleMoves,
-                    direction === Direction.UP ? 'up' : 'down',
+                    direction,
                     Checks.IS_EMPTY,
                     2
                 );
             }
 
+            // Attack
             moveDiagonal(
                 piece,
                 boardPosition,
                 possibleMoves,
-                direction === Direction.UP,
-                true,
+                direction,
+                XDirection.RIGHT,
                 Checks.HAS_ENEMY,
                 1
             );
@@ -59,230 +97,169 @@ export const getPossibleMoves = (piece: Piece, boardPosition: Piece[]) => {
                 piece,
                 boardPosition,
                 possibleMoves,
-                direction === Direction.UP,
-                false,
+                direction,
+                XDirection.LEFT,
                 Checks.HAS_ENEMY,
                 1
             );
             break;
         case PieceType.BISHOP:
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                true,
-                true,
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                true,
-                false,
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                false,
-                true,
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                false,
-                false,
-                Checks.ENEMY_OR_EMPTY
-            );
+            allDiagonals.forEach((_move) => {
+                moveDiagonal(
+                    piece,
+                    boardPosition,
+                    possibleMoves,
+                    _move.yDirection,
+                    _move.xDirection,
+                    Checks.ENEMY_OR_EMPTY
+                );
+            });
 
             break;
         case PieceType.ROOK:
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'up',
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'down',
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'right',
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'left',
-                Checks.ENEMY_OR_EMPTY
-            );
+            allStraights.forEach((_direction) => {
+                moveStraight(
+                    piece,
+                    boardPosition,
+                    possibleMoves,
+                    _direction,
+                    Checks.ENEMY_OR_EMPTY
+                );
+            });
 
             break;
         case PieceType.QUEEN:
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                true,
-                true,
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                true,
-                false,
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                false,
-                true,
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                false,
-                false,
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'up',
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'down',
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'right',
-                Checks.ENEMY_OR_EMPTY
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'left',
-                Checks.ENEMY_OR_EMPTY
-            );
+            allDiagonals.forEach((_move) => {
+                moveDiagonal(
+                    piece,
+                    boardPosition,
+                    possibleMoves,
+                    _move.yDirection,
+                    _move.xDirection,
+                    Checks.ENEMY_OR_EMPTY
+                );
+            });
+            allStraights.forEach((_direction) => {
+                moveStraight(
+                    piece,
+                    boardPosition,
+                    possibleMoves,
+                    _direction,
+                    Checks.ENEMY_OR_EMPTY
+                );
+            });
 
             break;
         case PieceType.KING:
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                true,
-                true,
-                Checks.ENEMY_OR_EMPTY,
-                1
-            );
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                true,
-                false,
-                Checks.ENEMY_OR_EMPTY,
-                1
-            );
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                false,
-                true,
-                Checks.ENEMY_OR_EMPTY,
-                1
-            );
-            moveDiagonal(
-                piece,
-                boardPosition,
-                possibleMoves,
-                false,
-                false,
-                Checks.ENEMY_OR_EMPTY,
-                1
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'up',
-                Checks.ENEMY_OR_EMPTY,
-                1
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'down',
-                Checks.ENEMY_OR_EMPTY,
-                1
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'right',
-                Checks.ENEMY_OR_EMPTY,
-                1
-            );
-            moveStraight(
-                piece,
-                boardPosition,
-                possibleMoves,
-                'left',
-                Checks.ENEMY_OR_EMPTY,
-                1
-            );
+            allDiagonals.forEach((_move) => {
+                moveDiagonal(
+                    piece,
+                    boardPosition,
+                    possibleMoves,
+                    _move.yDirection,
+                    _move.xDirection,
+                    Checks.ENEMY_OR_EMPTY,
+                    1
+                );
+            });
+            allStraights.forEach((_direction) => {
+                moveStraight(
+                    piece,
+                    boardPosition,
+                    possibleMoves,
+                    _direction,
+                    Checks.ENEMY_OR_EMPTY,
+                    1
+                );
+            });
 
+            break;
+        case PieceType.KNIGHT:
+            moveKnight(piece, boardPosition, possibleMoves);
             break;
     }
 
     return possibleMoves;
 };
 
+type KnightMove = {
+    first: { move: XDirection | YDirection; steps: 1 | 2 };
+    second: { move: XDirection | YDirection; steps: 1 | 2 };
+};
+
+const moveKnight = (
+    piece: Piece,
+    boardPosition: Piece[],
+    possibleMoves: Position[]
+) => {
+    const moves: KnightMove[] = [];
+
+    allStraights.forEach((firstMove) => {
+        let secondMoves: Array<XDirection | YDirection> = [];
+        if (firstMove in XDirection) {
+            secondMoves = allStraights.filter(
+                (direction) => !(direction in XDirection)
+            );
+        } else {
+            secondMoves = allStraights.filter(
+                (direction) => !(direction in YDirection)
+            );
+        }
+
+        secondMoves.forEach((secondMove) => {
+            moves.push({
+                first: { move: firstMove, steps: 2 },
+                second: { move: secondMove, steps: 1 },
+            });
+            moves.push({
+                first: { move: firstMove, steps: 1 },
+                second: { move: secondMove, steps: 2 },
+            });
+        });
+    });
+
+    moves.forEach((move) => {
+        let x = piece.position.x;
+        let y = piece.position.y;
+
+        for (const { move: _move, steps } of Object.values(move)) {
+            if (_move in XDirection) {
+                x = _move === XDirection.RIGHT ? x + steps : x - steps;
+            } else {
+                y = _move === YDirection.UP ? y + steps : y - steps;
+            }
+        }
+
+        checkAndPush(
+            piece,
+            { x, y },
+            boardPosition,
+            possibleMoves,
+            Checks.ENEMY_OR_EMPTY
+        );
+    });
+};
+
 const moveDiagonal = (
     piece: Piece,
     boardPosition: Piece[],
     possibleMoves: Position[],
-    up: boolean,
-    right: boolean,
+    yDirection: YDirection,
+    xDirection: XDirection,
     check: Checks,
     limit?: number
 ) => {
-    let x = right ? piece.position.x + 1 : piece.position.x - 1;
-    let y = up ? piece.position.y + 1 : piece.position.y - 1;
+    let x = piece.position.x;
+    let y = piece.position.y;
     let counter = 0;
     let foundPlacetaken = false;
+
+    const move = () => {
+        y = yDirection === YDirection.UP ? y + 1 : y - 1;
+        x = xDirection === XDirection.RIGHT ? x + 1 : x - 1;
+    };
+
+    move();
 
     while (
         inBounds({ x, y }) &&
@@ -298,9 +275,8 @@ const moveDiagonal = (
         }
 
         checkAndPush(piece, { x, y }, boardPosition, possibleMoves, check);
+        move();
 
-        x = right ? x + 1 : x - 1;
-        y = up ? y + 1 : y - 1;
         counter++;
     }
 };
@@ -309,30 +285,33 @@ const moveStraight = (
     piece: Piece,
     boardPosition: Piece[],
     possibleMoves: Position[],
-    direction: 'up' | 'down' | 'left' | 'right',
+    direction: YDirection | XDirection,
     check: Checks,
     limit?: number
 ) => {
+    let counter = 0;
+    let foundPlacetaken = false;
     let x = piece.position.x;
     let y = piece.position.y;
 
-    switch (direction) {
-        case 'up':
-            y++;
-            break;
-        case 'down':
-            y--;
-            break;
-        case 'right':
-            x++;
-            break;
-        case 'left':
-            x--;
-            break;
-    }
+    const move = () => {
+        switch (direction) {
+            case YDirection.UP:
+                y++;
+                break;
+            case YDirection.DOWN:
+                y--;
+                break;
+            case XDirection.RIGHT:
+                x++;
+                break;
+            case XDirection.LEFT:
+                x--;
+                break;
+        }
+    };
 
-    let counter = 0;
-    let foundPlacetaken = false;
+    move();
 
     while (
         inBounds({ x, y }) &&
@@ -348,21 +327,8 @@ const moveStraight = (
         }
 
         checkAndPush(piece, { x, y }, boardPosition, possibleMoves, check);
+        move();
 
-        switch (direction) {
-            case 'up':
-                y++;
-                break;
-            case 'down':
-                y--;
-                break;
-            case 'right':
-                x++;
-                break;
-            case 'left':
-                x--;
-                break;
-        }
         counter++;
     }
 };
@@ -401,6 +367,7 @@ const checkAndPush = (
             break;
     }
 };
+
 const hasFriendlyPiece = (
     piece: Piece,
     position: Position,

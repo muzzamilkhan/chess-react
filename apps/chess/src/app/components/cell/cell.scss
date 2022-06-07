@@ -4,9 +4,15 @@
 .selected {
     background-color: blue;
 }
+
+.possible-move.occupied {
+    background-color: red;
+}
+
 .possible-move {
     background-color: green;
 }
+
 .pawn-black {
     background-image: url('../../../assets/bp.svg');
 }
