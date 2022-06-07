@@ -28,6 +28,13 @@ export interface Piece {
     position: Position;
 }
 
+export type PlayerMove = {
+    color: blackOrWhite;
+    type: PieceType;
+    from: Position;
+    to: Position;
+};
+
 export const initialBoardPosition: Piece[] = [
     {
         id: uuid(),

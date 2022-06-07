@@ -18,7 +18,7 @@ export function Cell(prop: { name: string }) {
     const [selectedPiece, selectedPieceSet] = useAtom(selectedPieceAtom);
     const [, positionSet] = useAtom(positionAtom);
     const [possibleMoves, possibleMovesSet] = useAtom(possibleMovesAtom);
-    const [colorMove] = useAtom(colorMoveAtom);
+    const [colorMove, colorMoveSet] = useAtom(colorMoveAtom);
 
     const position = cellToPostion(prop.name);
 
@@ -61,6 +61,7 @@ export function Cell(prop: { name: string }) {
                     selectedPieceSet(attackedPiece);
                     positionSet({ x: -1, y: -1 });
                     movePieceSet();
+                    colorMoveSet(colorMove === 'white' ? 'black' : 'white');
                 }
             }
 
@@ -83,7 +84,7 @@ export function Cell(prop: { name: string }) {
                 (piece
                     ? `piece occupied ${piece.type.toLowerCase()}-${
                           piece.color
-                      } ${selected()}`
+                      } piece-icon ${selected()}`
                     : 'piece') + ` ${possibleMove()}`
             }></div>
     );

@@ -4,6 +4,7 @@ import {
     initialBoardPosition,
     Piece,
     blackOrWhite,
+    PlayerMove,
 } from '../models/types';
 
 const movePiece = (
@@ -31,6 +32,7 @@ export const positionAtom = atom<Position | undefined>(undefined);
 export const possibleMovesAtom = atom<Position[]>([]);
 export const boardPositionAtom = atom<Piece[]>(initialBoardPosition);
 export const colorMoveAtom = atom<blackOrWhite>('white');
+export const movesAtom = atom<PlayerMove[]>([]);
 export const movePieceAtom = atom(
     () => '',
     (get, set) => {
@@ -42,6 +44,20 @@ export const movePieceAtom = atom(
                 get(positionAtom)
             )
         );
+
+        const selectedPiece = get(selectedPieceAtom);
+
+        if (selectedPiece) {
+            set(movesAtom, [
+                ...get(movesAtom),
+                {
+                    color: selectedPiece.color,
+                    type: selectedPiece.type,
+                    from: selectedPiece.position,
+                    to: get(positionAtom)!,
+                },
+            ]);
+        }
 
         set(colorMoveAtom, get(colorMoveAtom) === 'white' ? 'black' : 'white');
     }
