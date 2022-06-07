@@ -5,6 +5,7 @@ import {
     positionAtom,
     selectedPieceAtom,
     possibleMovesAtom,
+    colorMoveAtom,
 } from '../../state/store';
 import './cell.scss';
 import { cellToPostion } from '../../models/helpers';
@@ -17,6 +18,7 @@ export function Cell(prop: { name: string }) {
     const [selectedPiece, selectedPieceSet] = useAtom(selectedPieceAtom);
     const [, positionSet] = useAtom(positionAtom);
     const [possibleMoves, possibleMovesSet] = useAtom(possibleMovesAtom);
+    const [colorMove] = useAtom(colorMoveAtom);
 
     const position = cellToPostion(prop.name);
 
@@ -47,8 +49,19 @@ export function Cell(prop: { name: string }) {
                     (_move) => _move.x === position.x && _move.y === position.y
                 )
             ) {
+                const isAttack = piece?.id;
+
                 positionSet(position);
                 movePieceSet();
+
+                if (isAttack) {
+                    const attackedPiece = boardPosition.find(
+                        (_piece) => _piece.id === isAttack
+                    );
+                    selectedPieceSet(attackedPiece);
+                    positionSet({ x: -1, y: -1 });
+                    movePieceSet();
+                }
             }
 
             possibleMovesSet([]);
@@ -57,6 +70,7 @@ export function Cell(prop: { name: string }) {
             return;
         }
         if (!piece) return;
+        if (piece.color !== colorMove) return;
 
         selectedPieceSet(piece);
         possibleMovesSet(getPossibleMoves(piece, boardPosition));

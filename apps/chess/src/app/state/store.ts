@@ -1,5 +1,10 @@
 import { atom } from 'jotai';
-import { Position, initialBoardPosition, Piece } from '../models/types';
+import {
+    Position,
+    initialBoardPosition,
+    Piece,
+    blackOrWhite,
+} from '../models/types';
 
 const movePiece = (
     boardPositions: Piece[],
@@ -25,6 +30,7 @@ export const selectedPieceAtom = atom<Piece | undefined>(undefined);
 export const positionAtom = atom<Position | undefined>(undefined);
 export const possibleMovesAtom = atom<Position[]>([]);
 export const boardPositionAtom = atom<Piece[]>(initialBoardPosition);
+export const colorMoveAtom = atom<blackOrWhite>('white');
 export const movePieceAtom = atom(
     () => '',
     (get, set) => {
@@ -36,5 +42,7 @@ export const movePieceAtom = atom(
                 get(positionAtom)
             )
         );
+
+        set(colorMoveAtom, get(colorMoveAtom) === 'white' ? 'black' : 'white');
     }
 );
